@@ -6,39 +6,34 @@
 <body>
 
 <div>
-  Welcome and happy <span id="today"></span>.
-  What's your name?
-  <input id="name" type="text" autofocus />
-  <button onclick="greet()">Submit</button>
-</div>
-<div id="greet">
-  <!-- greeting goes here -->
+  Q: <span id="question"></span>
+  <input id="input" type="text" autofocus />
+  <button onclick="respond()">Submit</button>
+  <br><br>
+  <span id="response"></span>
 </div>
 
 <script>
-// fills in <span id="today">...</span> with today's day of the week
-// returned from /rest/today server endpoint
-function today() {
-  $.get("/rest/today", function(theday) {
-      $("#today").text(theday);
+var x;
+function randomquestion() {
+  $.get("/rest/randomquestion", function(randomquestion) {
+      x = randomquestion;
+      $("#question").text(randomquestion);
     });
 };
 
-// fills in <div id="greeting">...</div> with the greeting
-// returned from calling the /rest/hello?name=... server endpoint
-// with the name from the input text box
-function greet() {
-  var thename = $("#name").val();
-  $.get("/rest/hello", { name: thename }, function(thehello) {
-      $("#greet").text(thehello);
+function respond() {
+	var theanswer = $("#input").val();
+  $.get("/rest/testanswer", { question: x, answer: theanswer }, function(output) {
+      $("#response").text("Your answer is... " + output);
     })
     .fail(function(jqXHR, textStatus, errorThrown) {
        // displays server error message, e.g. if called with empty name
-       $("#greet").text(textStatus + ": " + errorThrown);
+       $("#response").text(textStatus + ": " + errorThrown);
      });
 };
 
-$(today); // execute today() after DOM is ready, see https://api.jquery.com/ready/
+$(randomquestion); // execute randomquestion() after DOM is ready, see https://api.jquery.com/ready/
 </script>
 
 </body>

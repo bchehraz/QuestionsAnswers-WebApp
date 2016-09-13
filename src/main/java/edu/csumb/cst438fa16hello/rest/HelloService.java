@@ -14,6 +14,16 @@ import javax.ws.rs.core.Response;
  */
 @Path("/")
 public class HelloService {
+	QuestionsAnswers qa;
+	
+	public HelloService() {
+		qa = new QuestionsAnswers();
+		
+		qa.put("What is the color of the sky?","Blue");
+		qa.put("Who is the president of the USA (last name)?","Obama");
+		qa.put("What is 1+1?","2");
+	}
+	
     @GET
     @Path("/today")
     public String today() {
@@ -29,4 +39,16 @@ public class HelloService {
             return Response.ok("hello " + name).build();
         }
     }
+	
+	@GET
+	@Path("/randomquestion")
+	public Response getRandQuestion() {
+		return Response.ok(qa.getRandomQuestion()).build();
+	}
+	
+	@GET
+	@Path("/testanswer")
+	public Response checkQA(@QueryParam("question") String question, @QueryParam("answer") String answer) {
+		return Response.ok(qa.testAnswer(question,answer)).build();
+	}
 }
